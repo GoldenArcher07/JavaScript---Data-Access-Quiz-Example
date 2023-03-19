@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My UpWork Data Access Sample</title>
+
+
+</head>
+<body onLoad="populateAnswers();">
+
+    <script>
+
+        var json = '{ "quiz": { "q1": { "question": "Which one is correct team name in NBA?", "options": [ "New York Bulls", "Los Angeles Kings", "Golden State Warriros", "Huston Rocket" ], "answer": "Huston Rocket" }, "q2": { "question": "\'Namaste\' is a traditional greeting in which Asian language?", "options": [ "Hindi", "Mandarin", "Nepalese", "Thai" ], "answer": "Hindi" }, "q3": { "question": "The Spree river flows through which major European capital city?", "options": [ "Berlin", "Paris", "Rome", "London" ], "answer": "Berlin" }, "q4": { "question": "Which famous artist had both a \'Rose Period\' and a \'Blue Period\'?", "options": [ "Pablo Picasso", "Vincent van Gogh", "Salvador Dalí", "Edgar Degas" ], "answer": "Pablo Picasso" } } }';
+        var objekt = JSON.parse(json);
+
+
+
+        for (q in objekt.quiz) {                                                        // For in loop - for call to each question.
+
+        document.write('<h2>'+objekt.quiz[q].question+'</h2>');
+        // Writing.
+
+        for (let i = 0; i < objekt.quiz[q].options.length; i++) {                       //  Options Loop.
+
+        // IN HTML Writing;
+        document.write('<input type="radio" value="'+objekt.quiz[q].options[i]+'" name="'+q+'">'+objekt.quiz[q].options[i]+'<br>');
+             }
+         }
+
+    // RADIO (Console):
+    function getRadioValue() {
+
+    const radio = document.getElementsByTagName("input");
+
+    for (i = 0; i < radio.length; i++) {
+
+    if (radio[i].type == 'radio' && radio[i].checked) {
+        
+    console.log(radio[i].name, radio[i].value);
+    }
+    }
+    }
+
+    // LOCAL STORAGE:
+
+    // RADIO (Storage):
+    function spasiOdgovore() {                                                         // Saving Answers.
+        const radio = document.getElementsByTagName("input");                          // Getting Input. 
+
+        for (i = 0; i < radio.length; i++) {
+
+            if (radio[i].type == 'radio' && radio[i].checked) {                        // Selected Options Check
+                localStorage.setItem(radio[i].name, radio[i].value);                   // setItem - inn local storage (Passing trough all of radio fields and saving only checked ones).
+            }
+        }
+    }
+    
+
+    // Function call on page load.
+    function populateAnswers() {                                                       // Storing Answers.
+        const radio = document.getElementsByTagName("input");                          // Getting Input
+
+        for (q in objekt.quiz) {
+            const spaseniOdgovor = localStorage.getItem(q);                            // getItem (i get q) -  in local storage (setting constant to 'spaseniOdgovor'). 
+
+            if(spaseniOdgovor) {                                                       // Passing and check trough 'spaseniOdgovor':
+               for (i = 0; i < radio.length; i++) {
+                if (radio[i].type == 'radio' && radio[i].value == spaseniOdgovor) {   // Checking selected options.
+                    radio[i].checked = true;                                          // Conditions.
+                }
+            }
+        }
+
+    }
+}
+
+
+</script>
+
+<!--RADIO: -->
+<button id="radioButton" onclick="spasiOdgovore(), getRadioValue()">Save Answers</button> 
+
+</body>
+</html>
